@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Badge } from "../ui/badge";
 import SiteNavbar from "./SiteNavbar";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -18,13 +16,11 @@ import { useNavigate } from "react-router-dom";
 
 const CompanyDetails = () => {
   const [companies, setCompanies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const fetchCompanies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/v1/admin/getallcompanies",
+        "https://jobportal-backend-psrc.onrender.com/api/v1/admin/getallcompanies",
         {
           method: "GET",
           credentials: "include",
@@ -35,10 +31,11 @@ const CompanyDetails = () => {
       }
       const data = await response.json();
       setCompanies(data.companies);
-      setLoading(false);
     } catch (error) {
-      setError(error.message);
-      setLoading(false);
+      console.error("Error fetching companies:", error);
+
+
+      // Error handling can be added here if needed
     }
   };
   useEffect(() => {
@@ -48,7 +45,7 @@ const CompanyDetails = () => {
   const handleCompanyDelete = async (companyId) => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/v1/admin/deletecompany/" + companyId,
+        "https://jobportal-backend-psrc.onrender.com/api/v1/admin/deletecompany/" + companyId,
         {
           method: "DELETE",
           credentials: "include",
@@ -60,6 +57,7 @@ const CompanyDetails = () => {
       setCompanies(companies.filter((company) => company._id !== companyId));
     } catch (error) {
       alert("Failed to delete company");
+      console.error("Error deleting company:", error);
     }
   };
   return (
