@@ -1,26 +1,24 @@
+// Keep all imports the same
 import React, { useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Loader2 } from "lucide-react";
 import { setUser } from "@/redux/authSlice";
 import { USER_API_END_POINT } from "@/utils/constant";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-//  const { loading } = useSelector((store) => store.auth);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [loading, setLoading] = useState(false);
 
   const [input, setInput] = useState({
     email: "",
@@ -37,6 +35,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // <-- set loading true before API call
     try {
       const res = await fetch(`${USER_API_END_POINT}/login`, {
         method: "POST",
@@ -57,6 +56,8 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false); // <-- turn off loading after API completes
     }
   };
 
@@ -84,7 +85,7 @@ const Login = () => {
               name="email"
               onChange={onChangeEventHandler}
               value={input.email}
-              className="mt-2 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
             />
           </div>
 
@@ -96,7 +97,7 @@ const Login = () => {
               value={input.password}
               onChange={onChangeEventHandler}
               name="password"
-              className="mt-2 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
             />
             <span
               className="absolute inset-y-0 right-0 pr-3 mt-7 flex items-center cursor-pointer"
@@ -107,9 +108,9 @@ const Login = () => {
           </div>
 
           <div className="mb-6">
-            <RadioGroup className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <div className="flex items-center space-x-2">
-                <Input
+                <input
                   className="cursor-pointer"
                   type="radio"
                   name="role"
@@ -117,13 +118,14 @@ const Login = () => {
                   checked={input.role === "student"}
                   onChange={onChangeEventHandler}
                   id="r1"
+                  required
                 />
                 <Label htmlFor="r1" className="text-sm font-medium text-gray-700">
                   Student
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Input
+                <input
                   className="cursor-pointer"
                   type="radio"
                   name="role"
@@ -136,18 +138,18 @@ const Login = () => {
                   Recruiter
                 </Label>
               </div>
-            </RadioGroup>
+            </div>
           </div>
 
           {loading ? (
-            <Button className="w-full py-3 my-4 bg-blue-500 text-white rounded-lg flex justify-center items-center">
+            <Button className="w-full py-3 my-4 bg-blue-500 text-white rounded-lg flex justify-center items-center" disabled>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Please wait
             </Button>
           ) : (
             <Button
               type="submit"
-              className="w-full py-3 my-4  bg-[#6A38C2] text-white rounded-lg hover:bg-[#6A38C2]"
+              className="w-full py-3 my-4 bg-[#6A38C2] text-white rounded-lg hover:bg-[#57309c]"
             >
               Login
             </Button>
@@ -155,13 +157,13 @@ const Login = () => {
 
           <p className="text-center mt-4 text-gray-700">
             Don't Have an Account?{" "}
-            <Link to="/signup" className=" text-[#6A38C2] hover:underline">
+            <Link to="/signup" className="text-[#6A38C2] hover:underline">
               Sign Up
             </Link>
           </p>
           <p className="text-center mt-2 text-gray-700">
             Login as Admin?{" "}
-            <Link to="/owner/login" className=" text-[#6A38C2] hover:underline">
+            <Link to="/owner/login" className="text-[#6A38C2] hover:underline">
               Sign In
             </Link>
           </p>
