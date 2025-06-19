@@ -1,9 +1,9 @@
 // Keep all imports the same
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
-import { RadioGroup } from "@/components/ui/radio-group";
+//import { RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -156,7 +156,7 @@ const Login = () => {
           )}
 
           <p className="text-center mt-4 text-gray-700">
-            Don't Have an Account?{" "}
+            Don&apos;t Have an Account?{" "}
             <Link to="/signup" className="text-[#6A38C2] hover:underline">
               Sign Up
             </Link>
