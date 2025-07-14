@@ -152,8 +152,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
               <Label htmlFor="bio" className="text-right">
                 Bio
               </Label>
-              <Input
+              <textarea
                 id="bio"
+                placeholder="Add the bio"
                 className="col-span-3"
                 name="bio"
                 onChange={changeEventHandler}
